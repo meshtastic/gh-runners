@@ -21,4 +21,4 @@ jobs:
       with:
         context: ./x64
         push: true
-        tags: meshtastic/gh-runner:latest
+        tags: meshtastic/github-action-runner:latest
