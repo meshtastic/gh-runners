@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Docker login
-      run:  docker login -u meshtastic -p ${secrets.DOCKER_TOKEN}
+      run:  docker login -u meshtastic -p ${{secrets.DOCKER_TOKEN}}
 
     - name: Docker setup
       if: ${{ github.event_name != 'pull_request_target' && github.event_name != 'pull_request' }}
