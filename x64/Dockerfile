@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 MAINTAINER Jonathan Bennett
+SHELL ["/bin/bash", "-c"]
 RUN <<EOF
 useradd ubuntu -m -s /bin/bash
 usermod -a -G sudo ubuntu
@@ -14,7 +15,6 @@ WORKDIR /home/ubuntu
 USER ubuntu
 
 RUN <<EOF
-su ubuntu
 cd /home/ubuntu
 mkdir runner
 latest_runner_version=$(curl -I -v -s https://github.com/actions/runner/releases/latest 2>&1 | perl -ne 'next unless s/^< location: //; s{.*/v}{}; s/\s+//; print')
