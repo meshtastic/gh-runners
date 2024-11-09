@@ -24,13 +24,4 @@ python3 -m venv ./
 source ./bin/activate
 pip install -U platformio adafruit-nrfutil
 pip install -U meshtastic --pre
-git clone https://github.com/meshtastic/firmware
-cd firmware
-pio pkg install -e heltec-v3
-pio pkg install -e rak4631
-pio pkg install -e pico2
-pio pkg install -e native
-pio pkg install -e wio-e5
-cd ..
-rm -rf firmware
 EOF
