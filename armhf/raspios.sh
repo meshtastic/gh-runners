@@ -24,7 +24,7 @@ type="${3}"
 date="${4}"
 ARCH="${5}"
 : "${outdir:=$(pwd)}"
-: "${REPOSITORY:=localhost}"
+: "${REPOSITORY:=meshtastic}"
 echo "       image url:${imageurl}"
 echo "  debian release:${debian_release}"
 echo "            type: ${type}"
@@ -108,7 +108,7 @@ build_docker_image_with_docker_hub () {
     do
       docker tag "${REPOSITORY}"/raspios:"${date}"-"${debian_release}"-"${ARCH}"-"${type}" "${REPOSITORY}"/raspios:"$tag"
     done
-    #docker push -a "${REPOSITORY}"/raspios
+    docker push -a "${REPOSITORY}"/raspios
     set +x
   fi
 }
@@ -163,6 +163,6 @@ main () {
   echo "build being logged to raspios-${date}-${debian_release}-${ARCH}-${type}-build.log"
   build_docker_image_with_docker_hub 2>&1 | tee -a raspios-"${date}"-"${debian_release}"-"${ARCH}"-"${type}"-build.log
   make_docker_image_script 2>&1 | tee -a raspios-"${date}"-"${debian_release}"-"${ARCH}"-"${type}"-build.log
-  #[[ -z "$JUST_BUILD" ]] && enter_docker_image
+  [[ -z "$JUST_BUILD" ]] && enter_docker_image
 }
 main

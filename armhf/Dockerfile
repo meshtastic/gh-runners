@@ -1,4 +1,4 @@
-FROM localhost/raspios:latest
+FROM meshtastic/raspios:latest
 MAINTAINER Jonathan Bennett
 SHELL ["/bin/bash", "-c"]
 RUN <<EOF
