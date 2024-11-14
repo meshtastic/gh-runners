@@ -68,7 +68,7 @@ jobs:
     - name: build raspios
       run: |
         cd armhf
-        sh raspios.sh https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2024-10-28/2024-10-22-raspios-bookworm-armhf-lite.img.xz bookworm lite 2024-10-22 armhf
+        bash raspios.sh https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2024-10-28/2024-10-22-raspios-bookworm-armhf-lite.img.xz bookworm lite 2024-10-22 armhf
 
     - name: Docker build and push
       uses: docker/build-push-action@v6
