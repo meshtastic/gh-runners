@@ -75,6 +75,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         platforms: linux/armv6
-        context: ./armhf
+        context: default
+        file: ./armhf/Dockerfile
         push: true
         tags: meshtastic/github-action-runner:latest
