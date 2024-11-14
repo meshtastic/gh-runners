@@ -163,6 +163,6 @@ main () {
   echo "build being logged to raspios-${date}-${debian_release}-${ARCH}-${type}-build.log"
   build_docker_image_with_docker_hub 2>&1 | tee -a raspios-"${date}"-"${debian_release}"-"${ARCH}"-"${type}"-build.log
   make_docker_image_script 2>&1 | tee -a raspios-"${date}"-"${debian_release}"-"${ARCH}"-"${type}"-build.log
-  [[ -z "$JUST_BUILD" ]] && enter_docker_image
+  #[[ -z "$JUST_BUILD" ]] && enter_docker_image
 }
 main

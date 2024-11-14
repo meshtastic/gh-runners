@@ -3,50 +3,50 @@ on: workflow_dispatch
 
 jobs:
 
-#  build-x64:
-#
-#    runs-on: ubuntu-22.04
-#
-#    steps:
-#    - uses: actions/checkout@v4
-#
-#    - name: Docker login
-#      run:  docker login -u meshtastic -p ${{secrets.DOCKER_TOKEN}}
-#
-#    - name: Docker setup
-#      uses: docker/setup-buildx-action@v3
-#
-#    - name: Docker build and push
-#      uses: docker/build-push-action@v6
-#      with:
-#        context: ./x64
-#        push: true
-#        tags: meshtastic/github-action-runner:latest
-#
-#  build-arm64:
-#
-#    runs-on: ubuntu-22.04
-#
-#    steps:
-#    - uses: actions/checkout@v4
-#    - uses: docker/setup-qemu-action@v3
-#      name: Set up QEMU
-#
-#    - name: Docker login
-#      run:  docker login -u meshtastic -p ${{secrets.DOCKER_TOKEN}}
-#
-#    - name: Docker setup
-#      uses: docker/setup-buildx-action@v3
-#      with:
-#        platforms: linux/arm64
-#
-#    - name: Docker build and push
-#      uses: docker/build-push-action@v6
-#      with:
-#        platforms: linux/arm64
-#        context: ./arm64
-#        push: true
-#        tags: meshtastic/github-action-runner:latest
+  build-x64:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Docker login
+      run:  docker login -u meshtastic -p ${{secrets.DOCKER_TOKEN}}
+
+    - name: Docker setup
+      uses: docker/setup-buildx-action@v3
+
+    - name: Docker build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: ./x64
+        push: true
+        tags: meshtastic/github-action-runner:latest
+
+  build-arm64:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: docker/setup-qemu-action@v3
+      name: Set up QEMU
+
+    - name: Docker login
+      run:  docker login -u meshtastic -p ${{secrets.DOCKER_TOKEN}}
+
+    - name: Docker setup
+      uses: docker/setup-buildx-action@v3
+      with:
+        platforms: linux/arm64
+
+    - name: Docker build and push
+      uses: docker/build-push-action@v6
+      with:
+        platforms: linux/arm64
+        context: ./arm64
+        push: true
+        tags: meshtastic/github-action-runner:latest
 
   build-armhf:
 
