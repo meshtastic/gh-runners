@@ -9,6 +9,14 @@ apt upgrade -y
 apt install curl pip git python3-venv pkg-config libicu-dev sudo podman zip jq wget -y
 sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g'
 ln -s /usr/bin/podman /usr/bin/docker
+rm /usr/bin/uname
+
+echo '#bin/bash
+  echo armv7l
+  exit 0' > /usr/bin/uname
+
+chmod +x /usr/bin/uname
+
 EOF
 
 WORKDIR /home/ubuntu
