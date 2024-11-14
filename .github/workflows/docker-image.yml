@@ -37,12 +37,13 @@ jobs:
 
     - name: Docker setup
       uses: docker/setup-buildx-action@v3
-      platforms: linux/arm64
+      with:
+        platforms: linux/arm64
 
     - name: Docker build and push
       uses: docker/build-push-action@v6
-      platforms: linux/arm64
       with:
+        platforms: linux/arm64
         context: ./arm64
         push: true
         tags: meshtastic/github-action-runner:latest
