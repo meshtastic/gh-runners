@@ -46,7 +46,7 @@ jobs:
         platforms: linux/arm64
         context: ./arm64
         push: true
-        tags: meshtastic/github-action-runner:latest
+        tags: meshtastic/github-action-runner-arm64:latest
 
   build-armhf:
 
@@ -77,4 +77,4 @@ jobs:
         platforms: linux/armv6
         file: ./armhf/Dockerfile
         push: true
-        tags: meshtastic/github-action-runner:latest
+        tags: meshtastic/github-action-runner-armv6:latest
