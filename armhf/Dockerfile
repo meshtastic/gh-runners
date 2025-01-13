@@ -6,7 +6,7 @@ useradd ubuntu -m -s /bin/bash
 usermod -a -G sudo ubuntu
 apt update
 apt upgrade -y
-apt install curl pip git python3-venv pkg-config libicu-dev sudo podman zip jq wget -y
+apt install curl pip git python3-venv pkg-config libicu-dev sudo podman zip jq wget gh devscripts -y
 sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g'
 ln -s /usr/bin/podman /usr/bin/docker
 rm /usr/bin/uname
