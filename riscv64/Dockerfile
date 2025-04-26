@@ -17,8 +17,8 @@ EOF
 RUN <<EOF
 cd /home/ubuntu
 mkdir runner
-latest_runner_version=$(curl -I -v -s https://github.com/actions/runner/releases/latest 2>&1 | perl -ne 'next unless s/^< location: //; s{.*/v}{}; s/\s+//; print')
-curl -sL "https://github.com/actions/runner/releases/download/v${latest_runner_version}/actions-runner-linux-arm64-${latest_runner_version}.tar.gz" | tar xzvC ./runner/
+latest_runner_version=$(curl -I -v -s https://github.com/dkurt/github_actions_riscv/releases/latest 2>&1 | perl -ne 'next unless s/^< location: //; s{.*/v}{}; s/\s+//; print')
+curl -sL "https://github.com/dkurt/github_actions_riscv/releases/download/v${latest_runner_version}/actions-runner-linux-riscv64-${latest_runner_version}.tar.gz" | tar xzvC ./runner/
 ./runner/bin/installdependencies.sh
 chown -R ubuntu:ubuntu /home/ubuntu/runner
 EOF
