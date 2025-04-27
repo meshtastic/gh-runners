@@ -1,0 +1,43 @@
+name: Build on PR
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-amd64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/amd64
+      runs-on: ubuntu-24.04
+      push: false
+    secrets: inherit
+
+  build-arm64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/arm64
+      runs-on: ubuntu-24.04-arm
+      push: false
+    secrets: inherit
+
+  build-armv7:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/arm/v7
+      runs-on: ubuntu-24.04-arm
+      push: false
+    secrets: inherit
+
+  build-riscv64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/riscv64
+      runs-on: ubuntu-24.04  # amd64 host, built with qemu
+      push: false
+    secrets: inherit
