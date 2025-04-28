@@ -1,5 +1,6 @@
 FROM ubuntu:24.04
 LABEL org.opencontainers.image.authors="Jonathan Bennett, vidplace7"
+ARG TARGETARCH
 SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_ROOT_USER_ACTION=ignore
@@ -14,14 +15,9 @@ sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g'
 ln -s /usr/bin/podman /usr/bin/docker
 EOF
 
-RUN <<EOF
-cd /home/ubuntu
-mkdir runner
-latest_runner_version=$(curl -I -v -s https://github.com/actions/runner/releases/latest 2>&1 | perl -ne 'next unless s/^< location: //; s{.*/v}{}; s/\s+//; print')
-curl -sL "https://github.com/actions/runner/releases/download/v${latest_runner_version}/actions-runner-linux-arm64-${latest_runner_version}.tar.gz" | tar xzvC ./runner/
-./runner/bin/installdependencies.sh
-chown -R ubuntu:ubuntu /home/ubuntu/runner
-EOF
+COPY --chown=ubuntu:ubuntu bin/* /usr/local/bin/
+
+RUN install-actions-runner.sh
 
 WORKDIR /home/ubuntu
 USER ubuntu

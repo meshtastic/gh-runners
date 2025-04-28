@@ -1,0 +1,73 @@
+name: Build Docker Multi-Arch Manifest
+
+on:
+  schedule:
+    - cron: 0 8 1 * *
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-amd64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/amd64
+      runs-on: ubuntu-24.04
+      push: true
+    secrets: inherit
+
+  build-arm64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/arm64
+      runs-on: ubuntu-24.04-arm
+      push: true
+    secrets: inherit
+
+  build-armv7:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/arm/v7
+      runs-on: ubuntu-24.04-arm
+      push: true
+    secrets: inherit
+
+  build-riscv64:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      platform: linux/riscv64
+      runs-on: ubuntu-24.04  # amd64 host, built with qemu
+      push: true
+    secrets: inherit
+
+  docker-manifest:
+    needs:
+      - build-amd64
+      - build-arm64
+      - build-armv7
+      - build-riscv64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker login GHCR
+        id: login_ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Docker manifest
+        uses: int128/docker-manifest-create-action@v2
+        with:
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+          push: true
+          sources: |
+            ghcr.io/${{ github.repository }}@${{ needs.build-amd64.outputs.digest }}
+            ghcr.io/${{ github.repository }}@${{ needs.build-arm64.outputs.digest }}
+            ghcr.io/${{ github.repository }}@${{ needs.build-armv7.outputs.digest }}
+            ghcr.io/${{ github.repository }}@${{ needs.build-riscv64.outputs.digest }}
