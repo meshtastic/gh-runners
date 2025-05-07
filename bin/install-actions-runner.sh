@@ -14,6 +14,13 @@ elif [ "${TARGETARCH}" = "arm" ]; then
 elif [ "${TARGETARCH}" = "riscv64" ]; then
     GH_ARCH="riscv64"
     GH_SOURCE="dkurt/github_actions_riscv"
+    # get custom dotnet env
+    cd $HOME
+    wget https://github.com/dkurt/dotnet_riscv/releases/download/v8.0.101/dotnet-sdk-8.0.101-linux-riscv64.tar.gz
+    sudo mkdir /usr/share/dotnet
+    cd /usr/share/dotnet
+    sudo tar -xf $HOME/dotnet-sdk-8.0.101-linux-riscv64.tar.gz
+    rm -f $HOME/dotnet-sdk-8.0.101-linux-riscv64.tar.gz
 else
     echo "Unsupported architecture: ${TARGETARCH}"
     exit 1
