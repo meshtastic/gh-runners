@@ -34,7 +34,7 @@ jobs:
       digest: ${{ steps.docker_variant.outputs.digest }}
     runs-on: ${{ inputs.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Docker login DockerHub
         id: login_dockerhub
