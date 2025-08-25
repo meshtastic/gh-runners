@@ -1,0 +1,6 @@
+- hosts: all
+  vars_files:
+    - vars/runner.yml
+  roles:
+    - basic-os
+    - runner

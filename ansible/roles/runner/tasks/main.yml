@@ -1,0 +1,7 @@
+- name: runner
+  include_tasks:
+    file: github-runner.yml
+    apply:
+      become: yes
+  tags:
+    - github-runner

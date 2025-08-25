@@ -1,0 +1,7 @@
+- name: basic-os
+  include_tasks:
+    file: basic-os.yml
+    apply:
+      become: yes
+  tags:
+    - basic-os
