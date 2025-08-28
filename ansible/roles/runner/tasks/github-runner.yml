@@ -8,6 +8,15 @@
   register: systemd_created_or_changed
   loop: "{{ runner_servers[ansible_fqdn].runners }}"
 
+- name: "[Runner] Create check_podman_image.sh file"
+  ansible.builtin.template:
+    src: files/check_podman_image.sh.j2
+    dest: "/home/github/.check_podman_image.sh"
+    owner: github
+    group: github
+    mode: '700'
+  register: systemd_created_or_changed
+
 - name: "[Runner] create empty env file"
   ansible.builtin.file:
     path: "/home/github/.{{item.name}}-meshtastic.env"

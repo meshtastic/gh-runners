@@ -6,7 +6,7 @@ After=network-online.target
 RequiresMountsFor=/var/run/container/storage
 
 [Service]
-ExecStartPre=/usr/bin/podman pull ghcr.io/meshtastic/gh-runners:latest
+ExecStartPre=/home/github/.check_podman_image.sh
 ExecStartPre=/home/github/.{{item.name}}-meshtastic.make_env.sh
 ExecStart=/usr/bin/podman start -a {{item.name}}-meshtastic
 ExecStop=/usr/bin/podman stop -t 10 {{item.name}}-meshtastic

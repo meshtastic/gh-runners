@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SECS=`date +%s`
+IMAGE_EXPIRATION=86400
+IMAGE_UPDATED_FILE_PATH=/home/github/.image-updated
+if [ ! -f $IMAGE_UPDATED_FILE_PATH ]; then
+	echo $SECS > $IMAGE_UPDATED_FILE_PATH
+fi
+OLDSECS=`cat $IMAGE_UPDATED_FILE_PATH`
+if [ $SECS -gt `expr $OLDSECS + $IMAGE_EXPIRATION`  ] ; then
+    podman pull ghcr.io/meshtastic/gh-runners:latest
+    echo $SECS > $IMAGE_UPDATED_FILE_PATH
+fi
