@@ -5,6 +5,7 @@
       - jq
       - curl
       - xxd
+      - acl
     state: latest
 
 - name: "[Basic-OS] Install specific tools for deb-based OS"
@@ -12,14 +13,14 @@
     name:
       - bsdmainutils
     state: latest
-  wwhen: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: "[Basic-OS] Install specific tools for rpm-based OS"
   ansible.builtin.package:
     name:
       - slirp4netns
     state: latest
-  wwhen: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora'
 
 - name: "[Basic-OS] Create github user"
   ansible.builtin.user:
