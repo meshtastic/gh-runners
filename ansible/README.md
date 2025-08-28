@@ -22,11 +22,14 @@ This is required as this playbook will install [required tools](./roles/basic-os
 * configure podman: [here](./roles/basic-os/tasks/basic-os.yml#L31-L47)
 * create a podman container for each runner: [here](./roles/runner/tasks/github-runner.yml#L20-34)
 * create a systemd service for each runner container: [here](./roles/runner/tasks/github-runner.yml#L36-55)
+* create a script for creating runner secrets on each run [here](./roles/runner/tasks/github-runner.yml#L1-9)
+* create a script for checking every 24hrs if an update is available for the podman image `ghcr.io/meshtastic/gh-runners:latest`: [here](./roles/runner/tasks/github-runner.yml#L11-18)
 * create a secret file for each runner container: [here](./roles/runner/tasks/github-runner.yml#L1-18)
 
-In your newly created `github` user's home, you will find 2 files per runners:
+In your newly created `github` user's home, you will find 2 files per runners and one file common for all of them:
 ```
 github@runner-meshtastic:~$ ls -la
+.check_podman_image.sh                       # podman image update check script (common for all runners)
 .<your-runners-name>-meshtastic.env          # current running job secrets
 .<your-runners-name>-meshtastic.make_env.sh  # script generating the "curent running job secrets" file
 ```
@@ -35,11 +38,12 @@ Secrets are generated for each runner container by the `.<your-runners-name>-mes
 
 ##### Typical operation
 1. Before a container is started, the file `.<your-runners-name>-meshtastic.make_env.sh` is executed and write token values in `.<your-runners-name>-meshtastic.env`
-2. The container starts, the file `.<your-runners-name>-meshtastic.env` is picked up inside the container [as a volume](./roles/runner/tasks/github-runner.yml#L30) 
-3. The container authenticate on github using the secrets stored in `.<your-runners-name>-meshtastic.env`
-4. The meshtastic firmware job is executed
-5. The container terminates
-6. If the container [terminated smoothly](./roles/runner/files/github-runner-meshtastic.service.j2#L16), back to step `1.` 
+2. Before a container is started, the file `.check_podman_image.sh` is executed and check every 24hrs if the podman image `ghcr.io/meshtastic/gh-runners:latest` has an updated available 
+3. The container starts, the file `.<your-runners-name>-meshtastic.env` is picked up inside the container [as a volume](./roles/runner/tasks/github-runner.yml#L30) 
+4. The container authenticate on github using the secrets stored in `.<your-runners-name>-meshtastic.env`
+5. The meshtastic firmware job is executed
+6. The container terminates
+7. If the container [terminated smoothly](./roles/runner/files/github-runner-meshtastic.service.j2#L16), back to step `1.` 
 
 ## What do I need to adjust before deployment ?
 
