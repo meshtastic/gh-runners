@@ -1,0 +1,48 @@
+- name: "[Basic-OS] Install default tools for common OS"
+  ansible.builtin.package:
+    name:
+      - podman
+      - jq
+      - curl
+      - xxd
+      - acl
+    state: latest
+
+- name: "[Basic-OS] Install specific tools for deb-based OS"
+  ansible.builtin.package:
+    name:
+      - bsdmainutils
+    state: latest
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: "[Basic-OS] Install specific tools for rpm-based OS"
+  ansible.builtin.package:
+    name:
+      - slirp4netns
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora'
+
+- name: "[Basic-OS] Create github user"
+  ansible.builtin.user:
+    name: github
+    shell: /bin/bash
+    password_lock: yes
+    create_home: yes
+
+- name: "[Basic-OS] Check if github user is lingering"
+  ansible.builtin.stat:
+    path: "/var/lib/systemd/linger/github"
+  register: user_lingering
+
+- name: "[Basic-OS] Enable lingering for github"
+  ansible.builtin.command: "loginctl enable-linger github"
+  when:
+    - not user_lingering.stat.exists
+
+- name: "[Basic-OS] Set user.max_user_namespaces"
+  ansible.posix.sysctl:
+    name: user.max_user_namespaces
+    value: '28633'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/userns.conf

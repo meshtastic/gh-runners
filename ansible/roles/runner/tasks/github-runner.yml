@@ -1,0 +1,66 @@
+- name: "[Runner] Create make_env.sh file"
+  ansible.builtin.template:
+    src: files/make_env.sh.j2
+    dest: "/home/github/.{{item.name}}-meshtastic.make_env.sh"
+    owner: github
+    group: github
+    mode: '700'
+  register: systemd_created_or_changed
+  loop: "{{ runner_servers[ansible_fqdn].runners }}"
+
+- name: "[Runner] Create check_podman_image.sh file"
+  ansible.builtin.template:
+    src: files/check_podman_image.sh.j2
+    dest: "/home/github/.check_podman_image.sh"
+    owner: github
+    group: github
+    mode: '700'
+  register: systemd_created_or_changed
+
+- name: "[Runner] create empty env file"
+  ansible.builtin.file:
+    path: "/home/github/.{{item.name}}-meshtastic.env"
+    state: touch
+    owner: github
+    group: 1000
+    mode: '744'
+    modification_time: preserve
+    access_time: preserve
+  loop: "{{ runner_servers[ansible_fqdn].runners }}"
+
+- name: "[Runner] Create the github runner container"
+  containers.podman.podman_container:
+    name: "{{item.name}}-meshtastic"
+    image: ghcr.io/meshtastic/gh-runners:latest
+    command: 
+      - /bin/bash
+      - -c
+      - 'alias docker="podman"; source /.runner-meshtastic.env; cd; source bin/activate; cd runner; ./config.sh --url https://github.com/meshtastic --token $TOKEN --ephemeral --disableupdate --labels ubuntu-latest,{{ user_nickname }} --unattended --replace --name {{user_nickname}}-{{ item.runner_location }}-$UID_RANDOM --runnergroup Mesh-x86 --work _work; ./run.sh'
+    state: present
+    volumes:
+      - "/home/github/.{{item.name}}-meshtastic.env:/.runner-meshtastic.env"
+  become: true
+  become_user: github
+  become_method: sudo
+  loop: "{{ runner_servers[ansible_fqdn].runners }}"
+  
+- name: "[Runner] Create github container systemd service"
+  ansible.builtin.template:
+    src: "files/github-runner-meshtastic.service.j2"
+    dest: "/etc/systemd/system/github-{{item.name}}-meshtastic.service"
+    owner: root
+    group: root
+  register: systemd_created_or_changed
+  loop: "{{ runner_servers[ansible_fqdn].runners }}"
+
+- name: "[Runner] reload available systemd services"
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: systemd_created_or_changed is defined
+
+- name: "[Runner] Enable service github-runner-meshtastic and ensure it is not masked"
+  ansible.builtin.systemd_service:
+    name: "github-{{item.name}}-meshtastic"
+    enabled: true
+    masked: no
+  loop: "{{ runner_servers[ansible_fqdn].runners }}"

@@ -1,0 +1,19 @@
+[Unit]
+Description=Meshtastic Github {{item.name}}
+Documentation=man:podman-generate-systemd(1)
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/var/run/container/storage
+
+[Service]
+ExecStartPre=/home/github/.check_podman_image.sh
+ExecStartPre=/home/github/.{{item.name}}-meshtastic.make_env.sh
+ExecStart=/usr/bin/podman start -a {{item.name}}-meshtastic
+ExecStop=/usr/bin/podman stop -t 10 {{item.name}}-meshtastic
+User=github
+Group=github
+Type=simple
+Restart=on-success
+
+[Install]
+WantedBy=default.target

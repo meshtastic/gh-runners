@@ -1,0 +1,9 @@
+github_token: meshtastic-github-token
+user_nickname: github-username
+runner_servers:
+  your-system-fqdn.tld:
+    runners:
+      - name: runner-1
+        runner_location: datacenter-name
+      - name: runner-2
+        runner_location: datacenter-name
