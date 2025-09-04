@@ -20,10 +20,12 @@
 - name: "[Runner] create empty env file"
   ansible.builtin.file:
     path: "/home/github/.{{item.name}}-meshtastic.env"
-    state: file
+    state: touch
     owner: github
     group: 1000
     mode: '744'
+    modification_time: preserve
+    access_time: preserve
   loop: "{{ runner_servers[ansible_fqdn].runners }}"
 
 - name: "[Runner] Create the github runner container"
