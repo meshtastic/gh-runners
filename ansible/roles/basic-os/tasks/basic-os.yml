@@ -4,7 +4,6 @@
       - podman
       - jq
       - curl
-      - xxd
       - acl
     state: latest
 
