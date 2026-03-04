@@ -39,7 +39,7 @@ jobs:
       - name: Docker login DockerHub
         id: login_dockerhub
         if: ${{ inputs.push }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: meshtastic
           password: ${{ secrets.DOCKER_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
       - name: Docker login GHCR
         id: login_ghcr
         if: ${{ inputs.push }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
