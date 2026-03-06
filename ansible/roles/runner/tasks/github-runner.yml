@@ -35,7 +35,7 @@
     command: 
       - /bin/bash
       - -c
-      - 'alias docker="podman"; source /.runner-meshtastic.env; cd; source bin/activate; cd runner; ./config.sh --url https://github.com/meshtastic --token $TOKEN --ephemeral --disableupdate --labels ubuntu-latest,{{ user_nickname }} --unattended --replace --name {{user_nickname}}-{{ item.runner_location }}-$UID_RANDOM --runnergroup Mesh-x86 --work _work; ./run.sh'
+      - 'alias docker="podman"; source /.runner-meshtastic.env; cd; source bin/activate; cd runner; ./config.sh --url https://github.com/meshtastic --token $TOKEN --ephemeral --disableupdate --labels ubuntu-latest,{{ user_nickname }} --unattended --replace --name {{user_nickname}}-{{ item.runner_location }} --runnergroup Mesh-x86 --work _work; ./run.sh'
     state: present
     volumes:
       - "/home/github/.{{item.name}}-meshtastic.env:/.runner-meshtastic.env"
