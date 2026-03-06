@@ -65,7 +65,7 @@ jobs:
         run: echo "arch=${{ inputs.platform }}" | sed 's|linux/||; s|/||g' >> $GITHUB_OUTPUT
 
       - name: Docker build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         id: docker_variant
         env:
           # Prefix for the image name on DockerHub
